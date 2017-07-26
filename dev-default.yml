@@ -1,0 +1,7 @@
+- hosts: ubuntu-dev
+  sudo: yes
+  tasks:
+    - name: "installing basic app"
+      apt: pkg={{ item }} state=installed update_cache=yes
+      with_items:
+         - [python-minimal, python-pip, git]
