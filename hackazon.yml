@@ -11,3 +11,12 @@
          dest=/tmp/all-in-one-hackazon-master/Dockerfile
          regexp='ubuntu:latest'
          replace='ubuntu:14.04'
+    - name: "setting hackazon"
+      replace: >
+         dest=/tmp/all-in-one-hackazon-master/Dockerfile
+         regexp='\["/bin/bash", "/start.sh"\]'
+         replace='["/bin/bash"]'
+    - name: "build hackazon"
+      shell: docker build -t="image/hackazon" /tmp/all-in-one-hackazon-master
+    - name: "start hackazon"
+      shell: docker run -d --name hackazon -it -p 80:80 image/hackazon
