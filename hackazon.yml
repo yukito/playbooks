@@ -1,0 +1,13 @@
+- hosts: deploy-vwa-hackazon
+  sudo: yes
+  tasks:
+    - name: "downloading docker file"
+      unarchive: 
+         src: "https://github.com/cmutzel/all-in-one-hackazon/archive/master.zip"
+         dest: /tmp
+         remote_src: True
+    - name: "setting hackazon"
+      replace: >
+         dest=/tmp/all-in-one-hackazon-master/Dockerfile
+         regexp='ubuntu:latest'
+         replace='ubuntu:14.04'

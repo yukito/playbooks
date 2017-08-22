@@ -4,4 +4,4 @@
     - name: "installing basic app"
       apt: pkg={{ item }} state=installed update_cache=yes
       with_items:
-         - [python-minimal, python-pip, git]
+         - [python-minimal, python-pip, git, unzip]
