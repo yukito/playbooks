@@ -1,0 +1,35 @@
+- hosts: deploy-magento
+  sudo: yes
+  tasks:
+    - name: "check if docker file exists"
+      stat: path=/tmp/docker-magent-master
+      register: dmm
+    - name: "downloading docker file"
+      unarchive: 
+         src: "https://github.com/alexcheng1982/docker-magento/archive/master.zip"
+         dest: /tmp
+         remote_src: True
+      when: not dmm.stat.exists
+    - name: "setting magento"
+      replace: >
+         dest=/tmp/docker-magento-master/env
+         regexp='local.magento'
+         replace='localhost'
+      when: not dmm.stat.exists
+    - name: "setting magento"
+      replace: >
+         dest=/tmp/docker-magento-master/docker-compose.yml
+         regexp='80:80'
+         replace='8080:80'
+      when: not dmm.stat.exists
+    - name: "check if magento container exists"
+      shell: docker ps | grep dockermagentomaster_web_1
+      register: dmm_web
+      ignore_errors: True
+    - name: "build magento"
+      shell: docker-compose -f /tmp/docker-magento-master/docker-compose.yml up -d
+      when: dmm_web|failed
+    - name: "start magento"
+      shell: docker exec -d -it dockermagentomaster_web_1 install-sampledata
+    - name: "start magento"
+      shell: docker exec -d -it dockermagentomaster_web_1 install-magento
