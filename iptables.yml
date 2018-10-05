@@ -1,0 +1,10 @@
+- hosts: ubuntu-dev
+  become: yes
+  tasks:
+    - name: setting iptables
+      iptables:
+        chain: OUTPUT
+        jump: DROP
+        destination: "{{ item }}"
+      with_items:
+        - 8.8.8.8
